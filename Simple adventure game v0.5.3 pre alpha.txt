@@ -1,0 +1,144 @@
+#include<iostream>
+#include<cstdlib>
+#include<cmath>
+using namespace std;
+int gold=100,health=100,GamemodeInput,RoundSurvived,RoundSurvivedNeeded=15;
+bool OwnGun=false,OwnSword=false,OwnMedicine=false;
+//my functions: DONT FARGET
+void Instructions(){
+    cout<<"Welcome to the adventure game version 0.2, created by Easton. "<<endl;
+    cout<<"Luck and strategy is key to success."<<endl;
+    cout<<"changelog: v0.2, added 2 new scenarios and a shop in developement."<<endl;
+    cout<<"1. Random encounter(greater possible of gaining gold) 2. passive gameplay(in developement)? ";
+    cin>>GamemodeInput;
+    cout<<endl;
+}
+void RandomEncounter(){
+    srand(time(0));
+    int RandomNum=rand()%5+1,Option;
+    if(RandomNum==1){
+        cout<<"Bandit encounter!"<<endl;
+        cout<<"1.Cooperate(-25 gold) 2.Fight back(-50 health) 3. call the law (-10 gold,-20 health) ";
+        cin>>Option;
+        cout<<endl;
+        if(Option==1){
+            gold=gold-25;
+        } else if(Option==2){
+            health=health-50;
+        } else{
+            gold-=10;
+            health-=20;
+        }
+    } else if(RandomNum==2){
+        cout<<"Found Gold!"<<endl;
+        cout<<"1.Keep(+200 gold) 2.Abandon 3.hand it to the law ";
+        cin>>Option;
+        cout<<endl;
+        if(Option==1){
+            gold+=200;
+        } else if(Option==2){
+            cout<<"No free money for you $_$"<<endl;
+        } else{
+            cout<<"You are a good person"<<endl;
+        }
+    } else if(RandomNum==3){
+        cout<<"Arrested!"<<endl;
+        cout<<"1.Cooperate 2.Fight back(-75 health) 3.Bribe (-70 gold) ";
+        cin>>Option;
+        cout<<endl;
+        if(Option==1){
+            cout<<"a while later... You are finally freed"<<endl;
+        } else if(Option==2){
+            health-=75;
+        } else{
+            gold-=70;
+        }
+    } else if(RandomNum==4){
+        cout<<"Hostile Animal Encountered!"<<endl;
+        cout<<"1.Hunt(-30 health) 2.Bear Spray(-15 health -5 gold) 3.Run(-50 health) ";
+        cin>>Option;
+        cout<<endl;
+        if(Option==1){
+            health-=30;
+        } else if(Option==2){
+            health-=15;
+            gold-=5;
+        } else{
+            health-=50;
+        }
+    } else{
+        cout<<"Encountered tornado!"<<endl;
+        cout<<"1.Create shelter(-30 gold) 2.Hide in cave(-10 health -50 gold) 3.Do nothing(-75 health ouch) ";
+        cin>>Option;
+        cout<<endl;
+        if(Option==1){
+            gold-=30;
+        } else if(Option==2){
+            health-=10;
+            gold-=50;
+        } else{
+            health-=75;
+        }
+    }
+    cout<<"gold="<<gold<<endl;
+    cout<<"health="<<health<<endl;
+    cout<<endl;
+}
+void shop(){
+    int decision;
+    cout<<"Welcome to the shop!"<<endl;
+    cout<<"Pick your item:"<<endl;
+    cout<<"1.sword-350(damage taken halfed) 2.medicines-200(heal the player to max health and no damage taken upon next action) 3.gun-500(damage taken none but have limit of 4 uses)"<<endl;
+    cin>>decision;
+    if(decision==1){
+        if(gold>=350){
+            gold-=350;
+            OwnSword=true;
+        } else{
+            cout<<"Not enough gold"<<endl;
+        }
+    } else if(decision==2){
+        if(gold>=200){
+            gold-=200;
+            OwnMedicine=true;
+        } else{
+            cout<<"Not enough gold"<<endl;
+        }
+    } else{
+        if(gold>=500){
+            gold-=500;
+            OwnGun=true;
+        } else{
+            cout<<"Not enough gold"<<endl;
+        }
+    } 
+}
+
+int main(){
+    int ShopInput;
+    Instructions();
+    if(GamemodeInput==1){
+        while(true){
+            if(health<=0){
+                cout<<"You have been killed X_X";
+                return 0;
+            } else if(gold<=0){
+                cout<<"You have failed due to bankruptcy";
+                return 0;
+            } else if(RoundSurvived==RoundSurvivedNeeded){
+                cout<<"You have successfully maded out of the challenge! Good job.";
+                return 0;
+            } else{
+                RoundSurvived++;
+            }
+            cout<<"would you like to visit the shop? No turning back!"<<endl;
+            cout<<"1.yes 2.no"<<endl;
+            cin>>ShopInput;
+            if(ShopInput==1){
+                shop();
+            }
+            RandomEncounter();
+        }
+    }
+    return 0;
+}
